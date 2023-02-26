@@ -23,6 +23,7 @@ interface ITodoContext {
     state: TodoState
     dispatch: Dispatch<AsyncAction>
 }
+
 const TodoContext = React.createContext({} as ITodoContext)
 
 export function useTodoContext() {

@@ -43,7 +43,7 @@ function TodoTextInput(props: ITodoTextInput) {
             }
         }
     }
-    function handleBlur(text:string) {
+    function handleBlur(text: string) {
         if (props.newTodo) {
             props.onSave(text)
         }
@@ -56,9 +56,9 @@ function TodoTextInput(props: ITodoTextInput) {
             })}
             type="text"
             placeholder={props.placeholder}
-            autoFocus= {true}
+            autoFocus={true}
             value={todo}
-            onBlur={(e)=> handleBlur(e.currentTarget.value)}
+            onBlur={(e) => handleBlur(e.currentTarget.value)}
             onChange={(e) => setTodo(e.currentTarget.value)}
             onKeyDown={(e) => handleSubmit(e)}
         />

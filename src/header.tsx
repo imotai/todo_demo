@@ -32,6 +32,7 @@ function Header() {
             },
             db: state.db,
             collection: state.collection,
+            visibility: state.visibility,
         })
     }
     return (
@@ -39,7 +40,7 @@ function Header() {
             <h1>todos</h1>
             <TodoTextInput
                 newTodo
-                onSave={(text:string) => {
+                onSave={(text: string) => {
                     if (text.length !== 0) {
                         addTodo(text)
                     }

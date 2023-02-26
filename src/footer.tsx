@@ -40,9 +40,7 @@ function Footer(props: IFooter) {
                     </li>
                 ))}
             </ul>
-            {!!completedCount && (
-                <button className="clear-completed">Clear completed</button>
-            )}
+
         </footer>
     )
 }

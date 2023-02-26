@@ -43,6 +43,7 @@ export type AsyncAction = {
     payload?: Todo
     old_payload?: DocumentReference<Todo>
     db: DB3Store
+    visibility: string
 }
 
 export const asyncActionHandlers: AsyncActionHandlers<
@@ -62,6 +63,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
                 db: action.db,
                 collection: action.collection,
                 type: TodoActionkind.QUERY,
+                visibility: action.visibility,
             })
         },
 
@@ -79,6 +81,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
                 db: action.db,
                 collection: action.collection,
                 type: TodoActionkind.QUERY,
+                visibility: action.visibility,
             })
         },
 
@@ -94,6 +97,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
                 db: action.db,
                 collection: action.collection,
                 type: TodoActionkind.QUERY,
+                visibility: action.visibility,
             })
         },
 
@@ -114,15 +118,36 @@ export const asyncActionHandlers: AsyncActionHandlers<
                 db: action.db,
                 type: 'REFRESH',
                 payload: result.docs,
+                visibility: action.visibility,
             })
         },
+}
+
+export function runFilter(
+    visibility: string,
+    todos: Array<DocumentReference<Todo>>
+) {
+    switch (visibility) {
+        case 'All':
+            return todos
+        case 'Completed':
+            return todos.filter((t) => t.entry.doc.status)
+        case 'Active':
+            return todos.filter((t) => !t.entry.doc.status)
+        default:
+            throw new Error('Unknown filter: ' + visibility)
+    }
 }
 
 export function reducer(state: TodoState, action: RefreshAction) {
     const { type, payload } = action
     switch (type) {
         case 'REFRESH':
-            return { ...state, todoList: payload }
+            return {
+                ...state,
+                todoList: payload,
+                visibility: action.visibility,
+            }
         case 'LOADING':
             return { ...state, loading: true }
         case 'UNLOADING':

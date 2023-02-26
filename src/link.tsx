@@ -16,18 +16,31 @@
 //
 
 import React, { ReactNode } from 'react'
-import PropTypes from 'prop-types'
 import classnames from 'classnames'
+import { useTodoContext } from './context'
+import { TodoActionkind } from './reducer'
 
 export interface ILink {
     children: ReactNode
     filter: string
 }
 function Link(props: ILink) {
+    const { state, dispatch } = useTodoContext()
+    function doFilter(filter: string) {
+        dispatch({
+            db: state.db,
+            collection: state.collection,
+            type: TodoActionkind.QUERY,
+            visibility: filter,
+        })
+    }
     return (
         <a
-            className={classnames({ selected: props.filter === "All" })}
+            className={classnames({
+                selected: props.filter === state.visibility,
+            })}
             style={{ cursor: 'pointer' }}
+            onClick={() => doFilter(props.filter)}
         >
             {props.children}
         </a>

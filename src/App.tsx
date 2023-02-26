@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { ChangeEvent, KeyboardEvent, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useReducerAsync } from 'use-reducer-async'
@@ -13,8 +12,8 @@ function App() {
         'result crisp session latin must fruit genuine question prevent start coconut brave speak student dismiss'
     const wallet = DB3BrowserWallet.createNew(mnemonic, 'DB3_SECP259K1')
     const userAddress = wallet.getAddress()
-    const dbAddress = '0xd9a7b49ea4bbff268f13a0420f520647e2da587f'
-    const db = initializeDB3('http://127.0.0.1:26659', dbAddress, wallet)
+    const dbAddress = '0x24542b758574342517b67403e1c6ef9160a9d246'
+    const db = initializeDB3('http://grpc.testnet.db3.network', dbAddress, wallet)
     const collection = 'todos'
     const [inited, setInited] = useState(false)
     const [state, dispatch] = useReducerAsync(
@@ -25,7 +24,7 @@ function App() {
             db,
             collection,
             userAddress,
-            visibilityFilter: 'All',
+            visibility: 'All',
         },
         asyncActionHandlers
     )
@@ -34,6 +33,7 @@ function App() {
             db,
             collection,
             type: TodoActionkind.QUERY,
+            visibility: 'All',
         })
         setInited(true)
     }

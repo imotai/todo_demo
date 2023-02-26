@@ -39,11 +39,12 @@ function TodoItem(props: ITodoItem) {
             type: TodoActionkind.UPDATE,
             payload: {
                 ...todo.entry.doc,
-                status: true,
+                status: !todo.entry.doc.status,
             },
             old_payload: todo,
             db: todo.collection.db,
             collection: todo.collection.name,
+            visibility: state.visibility,
         })
     }
 
@@ -54,6 +55,7 @@ function TodoItem(props: ITodoItem) {
             old_payload: todo,
             db: todo.collection.db,
             collection: todo.collection.name,
+            visibility: state.visibility,
         })
     }
 
@@ -65,6 +67,7 @@ function TodoItem(props: ITodoItem) {
                 old_payload: todo,
                 db: todo.collection.db,
                 collection: todo.collection.name,
+                visibility: state.visibility,
             })
         } else {
             dispatch({
@@ -76,6 +79,7 @@ function TodoItem(props: ITodoItem) {
                 old_payload: todo,
                 db: todo.collection.db,
                 collection: todo.collection.name,
+                visibility: state.visibility,
             })
         }
         setEditing(false)
@@ -98,22 +102,22 @@ function TodoItem(props: ITodoItem) {
                     checked={todo.entry.doc.status}
                     onChange={() => completeTodo()}
                 />
-                <label onDoubleClick={()=>handleDoubleClick()}>
+                <label onDoubleClick={() => handleDoubleClick()}>
                     {todo.entry.doc.text}
                 </label>
                 <button className="destroy" onClick={() => deleteTodo()} />
             </div>
         )
     }
-   return (
-      <li
-        className={classnames({
-          completed: todo.entry.doc.status,
-          editing: editing
-        })}
-      >
-        {element}
-      </li>
+    return (
+        <li
+            className={classnames({
+                completed: todo.entry.doc.status,
+                editing: editing,
+            })}
+        >
+            {element}
+        </li>
     )
 }
 export default TodoItem

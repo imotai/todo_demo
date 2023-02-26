@@ -20,12 +20,13 @@ import React, { useState } from 'react'
 import TodoItem from './todo_item'
 import { useReducerAsync } from 'use-reducer-async'
 import { useTodoContext } from './context'
+import { runFilter } from './reducer'
 
 const TodoList = () => {
     const { state, dispatch } = useTodoContext()
     return (
         <ul className="todo-list">
-            {state.todoList.map((todo) => (
+            {runFilter(state.visibility, state.todoList).map((todo) => (
                 <TodoItem todo={todo} />
             ))}
         </ul>
