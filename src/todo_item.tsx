@@ -15,106 +15,105 @@
 // limitations under the License.
 //
 
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import classnames from 'classnames'
 import TodoTextInput from './todo_input'
-import { TodoActionkind } from './reducer'
-export default class TodoItem extends Component {
-    state = {
-        editing: false,
+import { TodoActionkind, Todo } from './reducer'
+import { useTodoContext } from './context'
+import { DocumentReference } from 'db3.js'
+
+export interface ITodoItem {
+    todo: DocumentReference<Todo>
+}
+
+function TodoItem(props: ITodoItem) {
+    const [editing, setEditing] = useState(false)
+    const { state, dispatch } = useTodoContext()
+    const todo = props.todo
+    function handleDoubleClick() {
+        setEditing(true)
     }
 
-    handleDoubleClick = () => {
-        this.setState({ editing: true })
-    }
-
-    completeTodo = (context) => {
-        context.dispatch({
+    function completeTodo() {
+        dispatch({
             type: TodoActionkind.UPDATE,
             payload: {
-                ...context.todo.doc.doc,
+                ...todo.entry.doc,
                 status: true,
             },
-            old_payload: context.todo,
-            db: context.db,
-            collection: context.collection,
+            old_payload: todo,
+            db: todo.collection.db,
+            collection: todo.collection.name,
         })
     }
 
-    deleteTodo = (context) => {
-        context.dispatch({
+    function deleteTodo() {
+        dispatch({
             type: TodoActionkind.DELETE,
-            payload: context.todo.doc.doc,
-            old_payload: context.todo,
-            db: context.db,
-            collection: context.collection,
+            payload: todo.entry.doc,
+            old_payload: todo,
+            db: todo.collection.db,
+            collection: todo.collection.name,
         })
     }
 
-    handleSave = (context, text) => {
+    function updateTodo(text: string) {
         if (text.length === 0) {
-            context.dispatch({
+            dispatch({
                 type: TodoActionkind.DELETE,
-                payload: context.todo.doc.doc,
-                old_payload: context.todo,
-                db: context.db,
-                collection: context.collection,
+                payload: todo.entry.doc,
+                old_payload: todo,
+                db: todo.collection.db,
+                collection: todo.collection.name,
             })
         } else {
-            context.dispatch({
+            dispatch({
                 type: TodoActionkind.UPDATE,
                 payload: {
-                    ...context.todo.doc.doc,
+                    ...todo.entry.doc,
                     text: text,
                 },
-                old_payload: context.todo,
-                db: context.db,
-                collection: context.collection,
+                old_payload: todo,
+                db: todo.collection.db,
+                collection: todo.collection.name,
             })
         }
-        this.setState({ editing: false })
+        setEditing(false)
     }
-
-    render() {
-        const { context } = this.props
-        let element
-        if (this.state.editing) {
-            element = (
-                <TodoTextInput
-                    text={context.todo.doc.doc.text}
-                    editing={this.state.editing}
-                    onSave={(text) => this.handleSave(context, text)}
+    let element
+    if (editing) {
+        element = (
+            <TodoTextInput
+                text={todo.entry.doc.text}
+                editing={editing}
+                onSave={(text) => updateTodo(text)}
+            />
+        )
+    } else {
+        element = (
+            <div className="view">
+                <input
+                    className="toggle"
+                    type="checkbox"
+                    checked={todo.entry.doc.status}
+                    onChange={() => completeTodo()}
                 />
-            )
-        } else {
-            element = (
-                <div className="view">
-                    <input
-                        className="toggle"
-                        type="checkbox"
-                        checked={context.todo.doc.doc.status}
-                        onChange={() => this.completeTodo(context)}
-                    />
-                    <label onDoubleClick={this.handleDoubleClick}>
-                        {context.todo.doc.doc.text}
-                    </label>
-                    <button
-                        className="destroy"
-                        onClick={() => this.deleteTodo(context)}
-                    />
-                </div>
-            )
-        }
-
-        return (
-            <li
-                className={classnames({
-                    completed: context.todo.doc.doc.status,
-                    editing: this.state.editing,
-                })}
-            >
-                {element}
-            </li>
+                <label onDoubleClick={()=>handleDoubleClick()}>
+                    {todo.entry.doc.text}
+                </label>
+                <button className="destroy" onClick={() => deleteTodo()} />
+            </div>
         )
     }
+   return (
+      <li
+        className={classnames({
+          completed: todo.entry.doc.status,
+          editing: editing
+        })}
+      >
+        {element}
+      </li>
+    )
 }
+export default TodoItem

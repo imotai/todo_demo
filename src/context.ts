@@ -1,6 +1,5 @@
-// @ts-nocheck
 //
-// todo_list.tsx
+// context.ts
 // Copyright (C) 2023 db3.network Author imotai <codego.me@gmail.com>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,19 +15,18 @@
 // limitations under the License.
 //
 
-import React, { useState } from 'react'
-import TodoItem from './todo_item'
-import { useReducerAsync } from 'use-reducer-async'
-import { useTodoContext } from './context'
+import React, { Dispatch } from 'react'
 
-const TodoList = () => {
-    const { state, dispatch } = useTodoContext()
-    return (
-        <ul className="todo-list">
-            {state.todoList.map((todo) => (
-                <TodoItem todo={todo} />
-            ))}
-        </ul>
-    )
+import { AsyncAction, TodoState } from './reducer'
+
+interface ITodoContext {
+    state: TodoState
+    dispatch: Dispatch<AsyncAction>
 }
-export default TodoList
+const TodoContext = React.createContext({} as ITodoContext)
+
+export function useTodoContext() {
+    return React.useContext(TodoContext)
+}
+
+export default TodoContext

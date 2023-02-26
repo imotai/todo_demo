@@ -1,6 +1,5 @@
-// @ts-nocheck
 //
-// todo_list.tsx
+// link.tsx
 // Copyright (C) 2023 db3.network Author imotai <codego.me@gmail.com>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,19 +15,23 @@
 // limitations under the License.
 //
 
-import React, { useState } from 'react'
-import TodoItem from './todo_item'
-import { useReducerAsync } from 'use-reducer-async'
-import { useTodoContext } from './context'
+import React, { ReactNode } from 'react'
+import PropTypes from 'prop-types'
+import classnames from 'classnames'
 
-const TodoList = () => {
-    const { state, dispatch } = useTodoContext()
+export interface ILink {
+    children: ReactNode
+    filter: string
+}
+function Link(props: ILink) {
     return (
-        <ul className="todo-list">
-            {state.todoList.map((todo) => (
-                <TodoItem todo={todo} />
-            ))}
-        </ul>
+        <a
+            className={classnames({ selected: props.filter === "All" })}
+            style={{ cursor: 'pointer' }}
+        >
+            {props.children}
+        </a>
     )
 }
-export default TodoList
+
+export default Link

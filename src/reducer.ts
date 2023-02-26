@@ -12,9 +12,18 @@ import {
 } from 'db3.js'
 
 export interface Todo {
-    id: string
     text: string
-    completed: boolean
+    status: boolean
+    owner: string
+}
+
+export interface TodoState {
+    todoList: Array<DocumentReference<Todo>>
+    loading: boolean
+    db: DB3Store
+    collection: string
+    userAddress: string
+    visibility: string
 }
 
 export enum TodoActionkind {
@@ -28,17 +37,12 @@ type RefreshAction = {
     type: 'REFRESH' | 'LOADING' | 'UNLOADING'
 }
 
-type AsyncAction = {
+export type AsyncAction = {
     collection: string
     type: string
     payload?: Todo
     old_payload?: DocumentReference<Todo>
     db: DB3Store
-}
-
-interface State {
-    todoList: Array<DocumentReference<Todo>>
-    loading: boolean
 }
 
 export const asyncActionHandlers: AsyncActionHandlers<
@@ -114,7 +118,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
         },
 }
 
-export function reducer(state: State, action: RefreshAction) {
+export function reducer(state: TodoState, action: RefreshAction) {
     const { type, payload } = action
     switch (type) {
         case 'REFRESH':
