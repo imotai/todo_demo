@@ -12,8 +12,8 @@ function App() {
         'result crisp session latin must fruit genuine question prevent start coconut brave speak student dismiss'
     const wallet = DB3BrowserWallet.createNew(mnemonic, 'DB3_SECP259K1')
     const userAddress = wallet.getAddress()
-    const dbAddress = '0x24542b758574342517b67403e1c6ef9160a9d246'
-    const db = initializeDB3('http://grpc.testnet.db3.network', dbAddress, wallet)
+    const dbAddress = '0xdcba0f529c615e90125ac8efc487875b718cd5b7'
+    const db = initializeDB3('https://grpc.devnet.db3.network', dbAddress, wallet)
     const collection = 'todos'
     const [inited, setInited] = useState(false)
     const [state, dispatch] = useReducerAsync(
