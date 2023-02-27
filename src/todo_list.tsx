@@ -27,7 +27,7 @@ const TodoList = () => {
     return (
         <ul className="todo-list">
             {runFilter(state.visibility, state.todoList).map((todo) => (
-                <TodoItem todo={todo} />
+                 <TodoItem key={todo.entry.id} todo={todo} />
             ))}
         </ul>
     )
