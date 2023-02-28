@@ -28,6 +28,7 @@ export interface ITodoItem {
 
 function TodoItem(props: ITodoItem) {
     const [editing, setEditing] = useState(false)
+    const [disabled, setDisabled] = useState(false)
     const { state, dispatch } = useTodoContext()
     const todo = props.todo
     function handleDoubleClick() {
@@ -45,10 +46,12 @@ function TodoItem(props: ITodoItem) {
             db: todo.collection.db,
             collection: todo.collection.name,
             visibility: state.visibility,
+            userAddress: state.userAddress,
         })
     }
 
     function deleteTodo() {
+        setDisabled(true)
         dispatch({
             type: TodoActionkind.DELETE,
             payload: todo.entry.doc,
@@ -56,6 +59,7 @@ function TodoItem(props: ITodoItem) {
             db: todo.collection.db,
             collection: todo.collection.name,
             visibility: state.visibility,
+            userAddress: state.userAddress,
         })
     }
 
@@ -68,6 +72,7 @@ function TodoItem(props: ITodoItem) {
                 db: todo.collection.db,
                 collection: todo.collection.name,
                 visibility: state.visibility,
+                userAddress: state.userAddress,
             })
         } else {
             dispatch({
@@ -80,6 +85,7 @@ function TodoItem(props: ITodoItem) {
                 db: todo.collection.db,
                 collection: todo.collection.name,
                 visibility: state.visibility,
+                userAddress: state.userAddress,
             })
         }
         setEditing(false)
@@ -105,7 +111,7 @@ function TodoItem(props: ITodoItem) {
                 <label onDoubleClick={() => handleDoubleClick()}>
                     {todo.entry.doc.text}
                 </label>
-                <button className="destroy" onClick={() => deleteTodo()} />
+                <button disabled={disabled} className="destroy" onClick={() => deleteTodo()} />
             </div>
         )
     }
