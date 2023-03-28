@@ -26,7 +26,12 @@ import {
     TodoState,
     Todo,
 } from './reducer'
-import { DB3BrowserWallet, initializeDB3, DocumentReference } from 'db3.js'
+import {
+    DB3BrowserWallet,
+    initializeDB3,
+    DocumentReference,
+    EventMessage,
+} from 'db3.js'
 import TodoContext from './context'
 import Header from './header'
 import MainSection from './main_section'
@@ -41,13 +46,19 @@ function getWallet() {
         return wallet
     }
 }
+
 function App() {
     const wallet = getWallet()
     const userAddress = wallet.getAddress()
-    const dbAddress = '0x817577ce5fc1ee957eff0d4e86a4b97cffbc284f'
-    const { db } = initializeDB3('https://grpc.devnet.db3.network', dbAddress, wallet)
+    const dbAddress = '0xb8f9d994a57ed99c82f3f6675553fbe832937ab8'
+    const { db } = initializeDB3(
+        'https://grpc.devnet.db3.network',
+        dbAddress,
+        wallet
+    )
     const collection = 'todos'
     const [inited, setInited] = useState(false)
+    const [block, setBlock] = useState(0)
     const [state, dispatch] = useReducerAsync(
         reducer,
         {
@@ -61,6 +72,39 @@ function App() {
         asyncActionHandlers
     )
 
+    const subscription_handle = (msg: EventMessage) => {
+        if (msg.event.oneofKind === 'blockEvent') {
+            setBlock(msg.event.blockEvent.height)
+        } else {
+            try {
+                if (
+                    msg.event.mutationEvent.to.length == 0 &&
+                    msg.event.mutationEvent.collections.length == 0
+                ) {
+                } else {
+                    // update the data
+                    dispatch({
+                        db,
+                        collection,
+                        type: TodoActionkind.QUERY,
+                        visibility: state.visibility,
+                        userAddress,
+                    })
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
+
+    const [ctrl, subscribe] = useAsyncFn(async () => {
+        try {
+            return await db.client.subscribe(subscription_handle)
+        } catch (e) {
+            console.log(e)
+        }
+    }, [db])
+
     if (!inited) {
         dispatch({
             db,
@@ -69,6 +113,7 @@ function App() {
             visibility: 'All',
             userAddress,
         })
+        subscribe()
         setInited(true)
     }
 
@@ -122,6 +167,9 @@ function App() {
                 <Header />
                 <MainSection />
             </div>
+            <footer className="info">
+                <p>block:{block}</p>
+            </footer>
         </TodoContext.Provider>
     )
 }

@@ -3654,10 +3654,10 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-db3.js@^0.2.15:
-  version "0.2.15"
-  resolved "https://registry.npmjs.org/db3.js/-/db3.js-0.2.15.tgz#b2ad65423b1b81182268d9262e46cb3a79cf46c3"
-  integrity sha512-WQQs/m7XWpsd4U3rhg6ObfyQfuT6dDz4xSwGu1C9yxOWY/pINY1IyAt3QhVl44WwkIPhmSqKdYRhWVdSBRSMIw==
+db3.js@0.2.17:
+  version "0.2.17"
+  resolved "https://registry.npmjs.org/db3.js/-/db3.js-0.2.17.tgz#c993858f04a15269d394fa384d67531a6847d7f8"
+  integrity sha512-z/eQuamsxny7EQip25vE+qqyOgscja50VLLWeQEjoHtpxXdAEPKiVbGyDTMN+pk7eJAFn+pPIebYmw7gySVWkw==
   dependencies:
     "@ethereumjs/util" "^8.0.5"
     "@metamask/eth-sig-util" "^5.0.2"

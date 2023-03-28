@@ -55,33 +55,18 @@ export const asyncActionHandlers: AsyncActionHandlers<
         async (action) => {
             const col = await collection<Todo>(action.db, action.collection)
             await addDoc<Todo>(col, action.payload!)
-            await new Promise((r) => setTimeout(r, 1100))
-            return dispatch({
-                ...action,
-                type: TodoActionkind.QUERY,
-            })
         },
 
     [TodoActionkind.UPDATE]:
         ({ dispatch }) =>
         async (action) => {
             await updateDoc<Todo>(action.old_payload!, action.payload)
-            await new Promise((r) => setTimeout(r, 1100))
-            return dispatch({
-                ...action,
-                type: TodoActionkind.QUERY,
-            })
         },
 
     [TodoActionkind.DELETE]:
         ({ dispatch }) =>
         async (action) => {
             await deleteDoc<Todo>(action.old_payload!)
-            await new Promise((r) => setTimeout(r, 1100))
-            return dispatch({
-                ...action,
-                type: TodoActionkind.QUERY,
-            })
         },
 
     [TodoActionkind.QUERY]:

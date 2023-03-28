@@ -111,7 +111,11 @@ function TodoItem(props: ITodoItem) {
                 <label onDoubleClick={() => handleDoubleClick()}>
                     {todo.entry.doc.text}
                 </label>
-                <button disabled={disabled} className="destroy" onClick={() => deleteTodo()} />
+                <button
+                    disabled={disabled}
+                    className="destroy"
+                    onClick={() => deleteTodo()}
+                />
             </div>
         )
     }
