@@ -128,6 +128,8 @@ function App() {
                 <header>
                     <h3>TodoMVC Dapp Information</h3>
                     <span className="source-links">
+                    <h5>Network Status</h5>
+                        <a>Block:{block}</a>
                         <h5>Database Address</h5>
                         <a>{truncateEthAddress(dbAddress)}</a>
                         <h5>Collection Name</h5>
